@@ -483,7 +483,7 @@ void autonomous(void)
   donutArmMotor.spinFor(stepThree, rotationUnits::rev, autoSpeed, velocityUnits::pct, true);
 
   // drive forward to goal
-  double stepFour = 0.6;
+  double stepFour = 0.5;
   leftMotor.spinFor(stepFour, rotationUnits::rev, 50, velocityUnits::pct, false);
   rightMotor.spinFor(stepFour, rotationUnits::rev, 50, velocityUnits::pct, true);
 
@@ -493,28 +493,44 @@ void autonomous(void)
   double stepFive = 3;
   donutPickerMotor.spinFor(stepFive, rotationUnits::rev, autoSpeed, velocityUnits::pct, true);
 
+  inertialSens.resetHeading();
+
+  highArmMotor.spinFor(0.15, rotationUnits::rev, autoSpeed, velocityUnits::pct, true);
+
   // drive forward to goal
-  leftMotor.spinFor(2, rotationUnits::rev, 50, velocityUnits::pct, false);
-  rightMotor.spinFor(2, rotationUnits::rev, 50, velocityUnits::pct, true);
+  leftMotor.spinFor(5, rotationUnits::rev, 50, velocityUnits::pct, false);
+  rightMotor.spinFor(5, rotationUnits::rev, 50, velocityUnits::pct, true);
+  
 
-  // bring up arm to drive
-  highArmMotor.spinFor(-0.2, rotationUnits::rev, autoSpeed, velocityUnits::pct, false);
-  donutArmMotor.spinFor(0.2, rotationUnits::rev, autoSpeed, velocityUnits::pct, false);
+  inertialSens.setHeading(0, rotationUnits::deg);
+  double pitch;
+  while (true)
+  {
+    pitch = inertialSens.pitch(rotationUnits::deg);
 
-  // drive forward onto ramp
-  leftMotor.spinFor(4, rotationUnits::rev, 100, velocityUnits::pct, false);
-  rightMotor.spinFor(4, rotationUnits::rev, 80, velocityUnits::pct, false);
+    if (pitch < 5 && pitch > -5)
+    {
+      leftMotor.setVelocity(0, velocityUnits::pct);
+      rightMotor.setVelocity(0, velocityUnits::pct);
+    }
+    else if (pitch > 5)
+    {
+      leftMotor.setVelocity(30, velocityUnits::pct);
+      rightMotor.setVelocity(20, velocityUnits::pct);
+    }
+    else if (pitch < -5)
+    {
+      leftMotor.setVelocity(-30, velocityUnits::pct);
+      rightMotor.setVelocity(-20, velocityUnits::pct);
+    }
 
-  wait(1000, msec);
+    leftMotor.spin(forward);
+    rightMotor.spin(forward);
 
-  lowArmMotor.spinFor(-0.2, rotationUnits::rev, autoSpeed, velocityUnits::pct, false);
+    printf("pitch: %f\n", pitch);
+    wait(50, msec);
+  }
 
-  // drive forward onto ramp
-  leftMotor.spinFor(3, rotationUnits::rev, 75, velocityUnits::pct, false);
-  rightMotor.spinFor(3, rotationUnits::rev, 50, velocityUnits::pct, false);
-
-  //lowArmMotor.spinFor(0.2, rotationUnits::rev, 80, velocityUnits::pct, true);
-  //lowArmMotor.spinFor(-0.5, rotationUnits::rev, autoSpeed, velocityUnits::pct, false);
 }
 
 /*---------------------------------------------------------------------------*/

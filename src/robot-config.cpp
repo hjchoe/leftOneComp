@@ -20,6 +20,10 @@ signature YELLOWGOAL = signature(5, 149, 2571, 1360, -4359, -3459, -3909, 2.4, 0
 vision visionSens = vision(PORT20, 50, BLUEGOAL, REDGOAL, YELLOWGOAL);
 /*vex-vision-config:end*/
 
+/*vex-inertial-config:begin*/
+inertial inertialSens = inertial(PORT18);
+/*vex-inertial-config:end*/
+
 /*vex-motor-config:begin*/
 motor rightMotor = motor(PORT1, ratio18_1, true);
 motor leftMotor = motor(PORT2, ratio18_1, false);

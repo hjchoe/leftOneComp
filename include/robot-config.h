@@ -11,6 +11,7 @@ extern signature BLUEGOAL;
 extern signature YELLOWGOAL;
 
 extern vision visionSens;
+extern inertial inertialSens;
 
 extern motor rightMotor;
 extern motor leftMotor;
